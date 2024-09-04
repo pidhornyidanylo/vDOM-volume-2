@@ -29,7 +29,6 @@ export const mount = (node, target) => {
     return node;
 }
 
-
 export const patchNode = (app, vApp, nextVApp) => {
     if (nextVApp === undefined) {
         vApp.remove();
@@ -60,12 +59,24 @@ const patchProps = (app, vProps, nextVProps) => {
     };
     Object.keys(mergedProps).forEach((key) => {
         if (vProps[key] !== nextVProps[key]) {
-            patchProp(app, key, nextVProps[key]);
+            patchProp(app, key, vProps[key], nextVProps[key]);
         }
     })
 }
 
-const patchProp = (app, key, nextPropValue) => {
+const patchProp = (app, key, propValue, nextPropValue) => {
+    if (key.startsWith("on")) {
+        const eventName = key.slice(2);
+
+        app[eventName] = nextPropValue;
+
+        if (!nextPropValue) {
+            app.removeEventListener(eventName, listener);
+        } else if (!propValue) {
+            app.addEventListener(eventName, listener);
+        }
+        return;
+    }
     if (nextPropValue == null || nextPropValue === false) {
         app.removeAttribute(key);
         return;
@@ -80,4 +91,27 @@ const patchChildren = (parent, vChildren, nextVChildren) => {
     nextVChildren.slice(vChildren.length).forEach((newBornVChild) => {
         parent.appendChild(createDOMNode(newBornVChild));
     });
+}
+
+export const patch = (nextVNode, node) => {
+    const vNode = node.v || recycleNode(node);
+    node = patchNode(node, vNode, nextVNode);
+    node.v = nextVNode;
+
+    return node;
+};
+
+const TEXT_NODE_TYPE = 3;
+
+const recycleNode = node => {
+    if (node.nodeType === TEXT_NODE_TYPE) {
+        return node.nodeValue;
+    }
+    const tagName = node.nodeName.toLowerCase();
+    const children = [].map.call(node.childNodes, recycleNode);
+    return createVNode(tagName, {}, children);
+};
+
+function listener(event) {
+    return this[event.type](event);
 }

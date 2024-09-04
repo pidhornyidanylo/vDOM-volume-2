@@ -1,14 +1,12 @@
 import {
-    mount,
     createVNode,
-    createDOMNode,
-    patchNode
+    patch
 } from "./vdom.js";
 
-const createVApp = state => {
+const createVApp = store => {
     const {
         count
-    } = state;
+    } = store.state;
     return createVNode("div", {
         class: "container",
         "data-count": count
@@ -23,45 +21,51 @@ const createVApp = state => {
         createVNode("div", {
             class: "buttons-container"
         }, [
-            createVNode("button", {
-                id: "decrease-button"
-            }, [
-                "-"
-            ]),
-            createVNode("button", {
-                id: "increase-button"
-            }, [
-                "+"
-            ])
+            createVButton({
+                text: "-",
+                id: "decrease-button",
+                onclick: () => store.setState({
+                    count: store.state.count - 1
+                })
+            }),
+            createVButton({
+                text: "+",
+                id: "increase-button",
+                onclick: () => store.setState({
+                    count: store.state.count + 1
+                })
+            }),
         ])
     ]);
 };
 
-const state = {
-    count: 0
+const createVButton = props => {
+    const {
+        text,
+        id,
+        onclick
+    } = props;
+
+    return createVNode("button", {
+        id: id,
+        onclick
+    }, [text]);
 };
-const appContainer = document.getElementById("app");
-let vApp = createVApp(state);
-let app = mount(createDOMNode(vApp), appContainer);
 
-let decreaseButton = document.getElementById("decrease-button");
-if (decreaseButton) {
-    decreaseButton.addEventListener("click", () => {
-        state.count--;
-        update(state);
-    })
-}
+const store = {
+    state: {
+        count: 0
+    },
+    onStateChanged: () => {},
+    setState(nextState) {
+        this.state = nextState;
+        this.onStateChanged();
+    }
+};
 
-let increaseButton = document.getElementById("increase-button");
-if (increaseButton) {
-    increaseButton.addEventListener("click", () => {
-        state.count++;
-        update(state);
-    })
-}
+// init
+let app = patch(createVApp(store), document.getElementById("app"));
 
-const update = (state) => {
-    const nextVApp = createVApp(state);
-    app = patchNode(app, vApp, nextVApp);
-    vApp = nextVApp;
-}
+store.onStateChanged = () => {
+    app = patch(createVApp(store), app);
+};

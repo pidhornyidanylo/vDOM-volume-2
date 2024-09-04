@@ -1,0 +1,20 @@
+{
+  "name": "vdom3",
+  "version": "1.0.0",
+  "description": "virtual dom simulation",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel src --out-dir dist && cp src/vdom.js dist/vdom.js",
+    "start": "live-server --port=5500 --no-browser",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.25.6",
+    "@babel/core": "^7.25.2",
+    "@babel/plugin-syntax-jsx": "^7.24.7",
+    "@babel/plugin-transform-react-jsx": "^7.25.2"
+  }
+}

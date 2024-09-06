@@ -1,44 +1,39 @@
 import { createVNode, patch } from "./vdom.js";
+import TodoBox from "./components/TodoBox.js";
+import Form from "./components/Form.js";
+import Tasks from "./components/Tasks.js";
 const createVApp = store => {
   const {
     count
   } = store.state;
+  const decrement = () => store.setState({
+    count: store.state.count - 1
+  });
+  const increment = () => store.setState({
+    count: store.state.count + 1
+  });
   return createVNode("div", {
     class: "container",
-    "data-count": count
-  }, [createVNode("h1", {}, ["Hello, Virtual DOM"]), createVNode("div", {}, [`Count: ${count}`]), "Text node without tags", createVNode("img", {
+    "data-count": String(count)
+  }, createVNode("h1", null, "Hello, Virtual DOM"), createVNode("div", null, "Count: ", String(count)), "Text node without tags", createVNode("img", {
     src: "https://i.ibb.co/M6LdN5m/2.png",
-    width: 400
+    width: "400"
   }), createVNode("div", {
     class: "buttons-container"
-  }, [createVButton({
-    text: "-",
+  }, createVNode("button", {
     id: "decrease-button",
-    onclick: () => store.setState({
-      count: store.state.count - 1
-    })
-  }), createVButton({
-    text: "+",
+    onclick: decrement
+  }, "-1"), createVNode("button", {
     id: "increase-button",
-    onclick: () => store.setState({
-      count: store.state.count + 1
-    })
-  })])]);
+    onclick: increment
+  }, "+1")), createVNode(TodoBox, {
+    children: createVNode("div", null, createVNode(Form, null), createVNode(Tasks, null))
+  }));
 };
-const createVButton = props => {
-  const {
-    text,
-    id,
-    onclick
-  } = props;
-  return createVNode("button", {
-    id: id,
-    onclick
-  }, [text]);
-};
-const store = {
+export const store = {
   state: {
-    count: 0
+    count: 0,
+    inputValue: ""
   },
   onStateChanged: () => {},
   setState(nextState) {

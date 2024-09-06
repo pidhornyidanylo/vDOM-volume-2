@@ -12,9 +12,24 @@ h1 {
 
 .container {
     display: flex;
+    align-items: center;
+    gap: 50px;
+}
+
+.demo1-container {
+    display: flex;
     flex-direction: column;
     align-items: center;
     gap: 15px;
+    justify-content: start;
+}
+
+.demo1-image {
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
 }
 
 .buttons-container {
@@ -51,4 +66,71 @@ h1 {
     -ms-border-radius: 5px;
     -o-border-radius: 5px;
     cursor: pointer;
+}
+
+
+/* ===================================================================== */
+
+.demo2-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    height: 100%;
+    justify-content: start;
+}
+
+
+.task-form {
+    margin-top: 25px;
+    justify-items: flex-start;    
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.task-label {
+    font-size: 1.2em;
+}
+
+.task-input {
+    font-size: 1.1em;
+    padding: 5px 8px;
+    border: none;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+
+.task-form button {
+    font-size: 1.1em;
+    padding: 5px 8px;
+    border: none;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+
+.tasks-list {
+    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    list-style-type: none;
+}
+
+.tasks-list li {
+    font-size: 1.2em;
+    padding: 7px 12px;
+    border-radius: 5px;
+    background-color: rgb(147, 134, 215);
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
 }

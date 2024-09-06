@@ -2,21 +2,24 @@ import { createVNode } from "../vdom.js";
 import { store } from "../app.js";
 
 const Form = () => {
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted");
+    const { tasks, inputValue } = store.state;
+    if(!inputValue.length) { return }
+    store.setState({ ...store.state, tasks: [...tasks, { id: tasks.length + 1, task: store.state.inputValue}] });
   };
-
+  console.log(store.state);
   const handleInput = (e) => {
     e.preventDefault();
     store.setState({ ...store.state, inputValue: e.target.value });
-    console.log("Current input value:", e.target.value); 
   };
 
   return (
-    <form onsubmit={handleSubmit}>
-      <label for="name">Task:</label>
+    <form class="task-form" onsubmit={handleSubmit}>
+      <label class="task-label" for="name">Task:</label>
       <input
+        class="task-input"
         value={store.state.inputValue || ""}
         oninput={handleInput} 
         id="name"

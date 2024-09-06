@@ -3,23 +3,39 @@ import { store } from "../app.js";
 const Form = () => {
   const handleSubmit = e => {
     e.preventDefault();
-    console.log("Form submitted");
+    const {
+      tasks,
+      inputValue
+    } = store.state;
+    if (!inputValue.length) {
+      return;
+    }
+    store.setState({
+      ...store.state,
+      tasks: [...tasks, {
+        id: tasks.length + 1,
+        task: store.state.inputValue
+      }]
+    });
   };
-  const handleChange = e => {
+  console.log(store.state);
+  const handleInput = e => {
     e.preventDefault();
     store.setState({
       ...store.state,
       inputValue: e.target.value
     });
-    console.log(store);
   };
   return createVNode("form", {
+    class: "task-form",
     onsubmit: handleSubmit
   }, createVNode("label", {
+    class: "task-label",
     for: "name"
   }, "Task:"), createVNode("input", {
-    value: store.state.inputValue,
-    onchange: handleChange,
+    class: "task-input",
+    value: store.state.inputValue || "",
+    oninput: handleInput,
     id: "name",
     type: "text",
     name: "name"

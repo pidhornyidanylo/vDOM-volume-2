@@ -1,8 +1,10 @@
 import { createVNode } from "../vdom.js";
-const Tasks = () => {
+import TaskItem from "./TaskItem.js";
+
+const Tasks = ({ tasks }) => {
   return (
-    <div>
-      
+    <div class="tasks-list">
+      {tasks.map(task => <TaskItem task={task} />)}
     </div>
   )
 }
